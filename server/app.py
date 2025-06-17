@@ -1,5 +1,5 @@
 from flask import Flask, send_file, request, jsonify
-from models import db, Student
+from models import db, Student, Course
 from flask_migrate import Migrate
 from dotenv import load_dotenv
 
@@ -59,6 +59,12 @@ def create_students():
     db.session.commit()
 
     return new_student.to_dict(), 201
+
+@app.route('/courses', methods=['GET'])
+def courses():
+    courses = Course.query.all()
+    courses_data = [course.to_dict() for course in courses]
+    return jsonify(courses_data), 200
 
 
 
