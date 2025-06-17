@@ -1,5 +1,6 @@
 from flask import Flask, send_file, request, jsonify
 from models import db, Student, Course
+from controllers import register_route
 from flask_migrate import Migrate
 from dotenv import load_dotenv
 
@@ -84,6 +85,7 @@ def create_course():
 
     return jsonify(new_course.to_dict()), 201
 
+register_route(app=app)
 
 # MISSING MODULE psycopg2
 
