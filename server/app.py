@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///students.db'
 app.config.from_prefixed_env()
 
 db.init_app(app)
@@ -38,6 +39,8 @@ def students():
 def students_id(id):
     
     student = Student.query.filter(Student.id==id).first()
+    if student is None:
+        return jsonify({"error": "Student not found"}), 404
 
     return student.to_dict(), 
 
@@ -67,6 +70,19 @@ def courses():
     return jsonify(courses_data), 200
 
 
+
+@app.route('/courses', methods=['POST'])
+def create_course():
+    data = request.get_json()
+    if not data or 'name' not in data:
+        return jsonify({"error": "Invalid input"}), 400
+
+    new_course = Course()
+    new_course.name = data['name']
+    db.session.add(new_course)
+    db.session.commit()
+
+    return jsonify(new_course.to_dict()), 201
 
 
 # MISSING MODULE psycopg2
