@@ -37,10 +37,22 @@ class Enrollment(db.Model, SerializerMixin):
     __tablename__ = "enrollments"
 
     id = Column(Integer(), primary_key=True)
-    student_id = Column(Integer(), ForeignKey("students.id", ondelete="CASCADE"))
-    course_id = Column(Integer(), ForeignKey("courses.id", ondelete="CASCADE"))
+    _student_id = Column(Integer(), ForeignKey("students.id", ondelete="CASCADE"))
+    _course_id = Column(Integer(), ForeignKey("courses.id", ondelete="CASCADE"))
 
     student = relationship("Student", back_populates="enrollments")
     course = relationship("Course", back_populates="enrollments")
 
-    serialize_rules = ("-student.enrollments", "-course.enrollments")
+    serialize_rules = ("-student.enrollments", "-course.enrollments",)
+
+    @property
+    def student_id(self):
+        return self._student_id
+    
+    @student_id.setter
+    def student_id(self, val):
+        student = Student.query.filter_by(id=val).first()
+        if student:
+            self._student_id = val
+        else:
+            raise ValueError("Student id is not valid") 
