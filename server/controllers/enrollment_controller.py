@@ -1,4 +1,4 @@
-from server.models import Enrollment, db
+from models import Enrollment, db
 from flask import Blueprint, jsonify, make_response, request
 
 enrollment_bp = Blueprint('enrollment_bp', __name__)

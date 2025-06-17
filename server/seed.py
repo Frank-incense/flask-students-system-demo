@@ -1,4 +1,4 @@
-from controllers import db, Student, Course, Enrollment
+from models import db, Student, Course, Enrollment
 from app import app
 from sqlalchemy.sql import text as sa_text
 

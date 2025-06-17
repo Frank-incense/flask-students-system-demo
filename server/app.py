@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///students.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///students.db'
 app.config.from_prefixed_env()
 
 db.init_app(app)
