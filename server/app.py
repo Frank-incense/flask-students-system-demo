@@ -44,7 +44,7 @@ def students_id(id):
 
     return student.to_dict(), 
 
-@app.route('/students')
+@app.route('/students', methods=['POST'])
 def create_students():
     data = request.get_json()
 
