@@ -28,13 +28,11 @@ def home():
 def uploads(filename):
     return send_file(f"./uploads/{filename}")
 
-@app.route('/students')
-def students():
-    
+@app.route('/students', methods=['GET'])
+def get_students():
     students = Student.query.all()
     students_data = [student.to_dict() for student in students]
-
-    return students_data, 200
+    return jsonify(students_data), 200
 
 @app.route('/students/<int:id>')
 def students_id(id):
