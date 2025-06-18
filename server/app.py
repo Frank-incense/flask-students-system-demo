@@ -1,4 +1,5 @@
 from flask import Flask, send_file, request, jsonify
+from flask_cors import CORS
 from models import db, Student, Course
 from controllers import register_route
 from flask_migrate import Migrate
@@ -7,6 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app)
 
 app.config.from_prefixed_env()
 
