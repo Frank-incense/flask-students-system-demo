@@ -28,39 +28,6 @@ def home():
 def uploads(filename):
     return send_file(f"./uploads/{filename}")
 
-@app.route('/students', methods=['GET'])
-def get_students():
-    students = Student.query.all()
-    students_data = [student.to_dict() for student in students]
-    return jsonify(students_data), 200
-
-@app.route('/students/<int:id>')
-def students_id(id):
-    
-    student = Student.query.filter(Student.id==id).first()
-    if student is None:
-        return jsonify({"error": "Student not found"}), 404
-
-    return student.to_dict(), 
-
-@app.route('/students', methods=['POST'])
-def create_students():
-    data = request.get_json()
-
-    name = data.get('name')
-    email = data.get('email')
-
-    if not name or not email:
-        return {"error": "Name and email are required."}, 400
-
-    if Student.query.filter_by(email=email).first():
-        return {"error": "Email already exists."}, 409
-
-    new_student = Student(name=name, email=email)
-    db.session.add(new_student)
-    db.session.commit()
-
-    return new_student.to_dict(), 201
 
 @app.route('/courses', methods=['GET'])
 def courses():
@@ -80,10 +47,12 @@ def create_course():
     new_course.name = data['name']
     db.session.add(new_course)
     db.session.commit()
-
+    
     return jsonify(new_course.to_dict()), 201
 
 register_route(app=app)
 
+if __name__ =='__main':
+    app.run(port=5555, debug=True)
 # MISSING MODULE psycopg2
 

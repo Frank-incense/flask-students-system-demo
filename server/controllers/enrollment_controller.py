@@ -3,7 +3,7 @@ from flask import Blueprint, jsonify, make_response, request
 
 enrollment_bp = Blueprint('enrollment_bp', __name__)
 
-@enrollment_bp.route('/enrolments',methods=['GET','POST', 'DELETE'])
+@enrollment_bp.route('/enrollments',methods=['GET','POST'])
 def enrollments():
     if request.method == 'GET':
         enrollments = Enrollment.query.all()
@@ -20,8 +20,8 @@ def enrollments():
         data = request.get_json()
         try: 
             newEnrollment = Enrollment(
-                student_id = data.get("student_id"),
-                course_id = data.get("course_id")
+                _student_id = data.get("student_id"),
+                _course_id = data.get("course_id")
             )
 
             db.session.add(newEnrollment)
@@ -36,5 +36,17 @@ def enrollments():
             stat = 400
             return make_response(res, stat)
 
-    elif request.method == 'DELETE':
-        pass
+@enrollment_bp.route('/enrollments/<int:id>', methods=['DELETE'])
+def del_enrollments(id):
+    enrollment = Enrollment.query.filter_by(id=id).first()
+    if enrollment:
+        db.session.delete(enrollment)
+        db.session.commit()
+    else:
+        res = make_response(
+            {'error': 'Enrollment not found'}, 404
+        )
+        return res
+
+    res = make_response('', 204)
+    return res
